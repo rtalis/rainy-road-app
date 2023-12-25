@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rainy_road_app/src/frosted_glass.dart';
 import 'package:rainy_road_app/src/settings.dart';
+import 'package:rainy_road_app/src/update.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
@@ -52,16 +53,7 @@ class _MapScreenState extends State<MapScreen> {
     ..setNavigationDelegate(
       NavigationDelegate(
         onProgress: (int progress) {
-          // Update loading bar.
-        },
-        onPageStarted: (String url) {},
-        onPageFinished: (String url) {},
-        onWebResourceError: (WebResourceError error) {},
-        onNavigationRequest: (NavigationRequest request) {
-          if (request.url.startsWith('https://www.youtube.com/')) {
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
+          debugPrint(progress.toString());
         },
       ),
     );
@@ -69,6 +61,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
+    UpdateChecker().checkForUpdates(context);
     _loadCities();
     _loadSettings();
   }

@@ -14,8 +14,8 @@ I build this app for this, it will show if its raining on the road to your desti
 
 ## Getting Started
 
-It uses flutter on the app and it the map is generated on a server that you can set as well maybe in your localhost.
+It uses flutter on the app and the map is generated on a server that you can set as well.
 
-You can get the server side app [here](https://pages.github.com/).
+You can get the server side script [here](https://pages.github.com/).
 
 
