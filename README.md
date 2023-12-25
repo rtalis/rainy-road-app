@@ -16,6 +16,6 @@ I build this app for this, it will show if its raining on the road to your desti
 
 It uses flutter on the app and the map is generated on a server that you can set as well.
 
-You can get the server side script [here](https://pages.github.com/).
+You can get the server side script [here]([https://pages.github.com/](https://github.com/rtalis/rainy_road)https://github.com/rtalis/rainy_road).
 
 
