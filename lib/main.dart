@@ -19,7 +19,7 @@ class RainyRoadApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Map App',
+      title: 'Rainy Road App ',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -101,11 +101,11 @@ class _MapScreenState extends State<MapScreen> {
             child: Center(
               child: FrostedGlassBox(
                 // theWidth is the width of the frostedglass
-                theWidth: 300.0,
+                width: 300.0,
                 // theHeight is the height of the frostedglass
-                theHeight: 288.0,
+                height: 288.0,
                 // theChild is the child of the frostedglass
-                theChild: Padding(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Form(
                     key: _formKey,
@@ -226,9 +226,9 @@ class _MapScreenState extends State<MapScreen> {
             visible: isLoading,
             child: const Center(
               child: FrostedGlassBox(
-                theHeight: 200.0,
-                theWidth: 300.0,
-                theChild: Padding(
+                height: 200.0,
+                width: 300.0,
+                child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
