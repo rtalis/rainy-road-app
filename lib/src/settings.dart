@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -17,16 +18,24 @@ enum Calendar { everyDay, workDays, weekEnds }
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _serverController = TextEditingController();
   String frequency = '';
-
-  bool enableRepSettings = false;
+  String frequencyTwo = '';
+  bool alarmTwoEnabled = false;
+  bool repEnabled = false;
   Calendar calendarView = Calendar.everyDay;
+  Calendar calendarViewTwo = Calendar.everyDay;
+
   TimeOfDay selectedTime = TimeOfDay.now();
+  TimeOfDay selectedTimeTwo = TimeOfDay.now();
+  final TextEditingController _controllerTwo = TextEditingController();
   final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
     _loadSettings().then((value) => setState(() {
-          _controller.text = '${selectedTime.hour}:${selectedTime.minute}';
+          _controller.text =
+              '${selectedTime.hour}:${selectedTime.minute.toString().padLeft(2, '0')}';
+          _controllerTwo.text =
+              '${selectedTimeTwo.hour}:${selectedTimeTwo.minute.toString().padLeft(2, '0')}';
         }));
   }
 
@@ -63,17 +72,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const Text("Habilitar repetições"),
                 Switch(
                   thumbIcon: thumbIcon,
-                  value: enableRepSettings,
+                  value: repEnabled,
                   onChanged: (bool value) {
                     setState(() {
-                      enableRepSettings = value;
+                      Permission.notification.request().then((status) {
+                        if (status != PermissionStatus.denied) {
+                          repEnabled = value;
+                        }
+                      });
                     });
                   },
                 ),
               ],
             ),
             const SizedBox(height: 20),
-            if (enableRepSettings) ...[
+            if (repEnabled) ...[
               const Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Configurações de repetição")),
@@ -96,9 +109,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 selected: <Calendar>{calendarView},
                 onSelectionChanged: (Set<Calendar> newSelection) {
                   setState(() {
-                    // By default there is only a single segment that can be
-                    // selected at one time, so its value is always the first
-                    // item in the selected set.
                     calendarView = newSelection.first;
                   });
                 },
@@ -111,7 +121,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 controller: _controller,
                 onTap: () => _selectTime(context),
               ),
-              const SizedBox(height: 20),
+              if (alarmTwoEnabled) ...[
+                const SizedBox(height: 30),
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Configurações de segunda repetição")),
+                const SizedBox(height: 16),
+                SegmentedButton<Calendar>(
+                  // Segmented button for the second frequency
+                  segments: const <ButtonSegment<Calendar>>[
+                    ButtonSegment<Calendar>(
+                        value: Calendar.everyDay,
+                        label: Text('Diário'),
+                        icon: Icon(Icons.calendar_view_day)),
+                    ButtonSegment<Calendar>(
+                        value: Calendar.workDays,
+                        label: Text('Seg-Sex'),
+                        icon: Icon(Icons.calendar_view_week)),
+                    ButtonSegment<Calendar>(
+                        value: Calendar.weekEnds,
+                        label: Text('Sab-Dom'),
+                        icon: Icon(Icons.calendar_view_month)),
+                  ],
+                  selected: <Calendar>{calendarViewTwo},
+                  onSelectionChanged: (Set<Calendar> newSelection) {
+                    setState(() {
+                      calendarViewTwo = newSelection.first;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  // Text field for the second frequency
+                  readOnly: true,
+                  decoration:
+                      const InputDecoration(label: Text("Selecionar hora")),
+                  controller: _controllerTwo,
+                  onTap: () => _selectTimeTwo(context),
+                ),
+              ],
+              IconButton(
+                  onPressed: () => setState(() {
+                        alarmTwoEnabled = !alarmTwoEnabled;
+                      }),
+                  icon: alarmTwoEnabled
+                      ? const Icon(Icons.cancel_outlined)
+                      : const Icon(Icons.add_circle_outline)),
             ],
             ElevatedButton(
               child: const Text("Salvar"),
@@ -138,13 +193,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _serverController.text = prefs.getString('server') ?? "http://";
-      enableRepSettings = prefs.getBool('enableRepSettings') ?? false;
+      repEnabled = prefs.getBool('repEnabled') ?? false;
+      alarmTwoEnabled = prefs.getBool('alarmTwoEnabled') ?? false;
       frequency = prefs.getString('frequency') ?? "";
-
+      frequencyTwo = prefs.getString('frequencyTwo') ?? "";
       final savedHour = prefs.getInt('selectedHour') ?? TimeOfDay.now().hour;
       final savedMinute =
           prefs.getInt('selectedMinute') ?? TimeOfDay.now().minute;
+      final savedHourTwo =
+          prefs.getInt('selectedHourTwo') ?? TimeOfDay.now().hour;
+      final savedMinuteTwo =
+          prefs.getInt('selectedMinuteTwo') ?? TimeOfDay.now().minute;
       selectedTime = TimeOfDay(hour: savedHour, minute: savedMinute);
+      selectedTimeTwo = TimeOfDay(hour: savedHourTwo, minute: savedMinuteTwo);
+
+      switch (frequency) {
+        case 'everyDay':
+          calendarView = Calendar.everyDay;
+          break;
+        case 'workDays':
+          calendarView = Calendar.workDays;
+          break;
+        case 'weekEnds':
+          calendarView = Calendar.weekEnds;
+          break;
+        // Add more cases if needed
+        default:
+          calendarView = Calendar.everyDay;
+      }
+      switch (frequencyTwo) {
+        case 'everyDay':
+          calendarViewTwo = Calendar.everyDay;
+          break;
+        case 'workDays':
+          calendarViewTwo = Calendar.workDays;
+          break;
+        case 'weekEnds':
+          calendarViewTwo = Calendar.weekEnds;
+          break;
+        default:
+          calendarViewTwo = Calendar.everyDay;
+      }
     });
   }
 
@@ -164,14 +253,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // Default case if none of the above matches
         frequency = '';
     }
+    switch (calendarViewTwo) {
+      case Calendar.everyDay:
+        frequencyTwo = 'everyDay';
+        break;
+      case Calendar.workDays:
+        frequencyTwo = 'workDays';
+        break;
+      case Calendar.weekEnds:
+        frequencyTwo = 'weekEnds';
+        break;
+      // Add more cases if needed
+      default:
+        // Default case if none of the above matches
+        frequencyTwo = '';
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      prefs.setBool('enableRepSettings', enableRepSettings);
+      prefs.setBool('repEnabled', repEnabled);
+      prefs.setBool('alarmTwoEnabled', alarmTwoEnabled);
       prefs.setString('server', _serverController.text);
       prefs.setString('frequency', frequency);
+      prefs.setString('frequencyTwo', frequencyTwo);
       prefs.setInt('selectedHour', selectedTime.hour);
       prefs.setInt('selectedMinute', selectedTime.minute);
+      prefs.setInt('selectedHourTwo', selectedTimeTwo.hour);
+      prefs.setInt('selectedMinuteTwo', selectedTimeTwo.minute);
     });
   }
 
@@ -183,7 +291,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (picked != selectedTime) {
       setState(() {
         selectedTime = picked;
-        _controller.text = '${selectedTime.hour}:${selectedTime.minute}';
+        _controller.text =
+            '${selectedTime.hour}:${selectedTime.minute.toString().padLeft(2, '0')}';
+        _saveSettings();
+      });
+    }
+  }
+
+  Future<void> _selectTimeTwo(BuildContext context) async {
+    final TimeOfDay picked = (await showTimePicker(
+      context: context,
+      initialTime: selectedTimeTwo,
+    ))!;
+    if (picked != selectedTimeTwo) {
+      setState(() {
+        selectedTimeTwo = picked;
+        _controllerTwo.text =
+            '${selectedTimeTwo.hour}:${selectedTimeTwo.minute.toString().padLeft(2, '0')}';
         _saveSettings();
       });
     }

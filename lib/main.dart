@@ -11,54 +11,52 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'dart:developer' as developer;
+
+Future<void> showNotification(MyAppState appState) async {
+  try {
+    appState.response = await http.get(Uri.parse(
+        '${appState.server}/generate_map?start_location=${appState.startCity}&end_location=${appState.endCity}}'));
+    appState.htmlContent = appState.response.body;
+    appState.controller.loadHtmlString(appState.htmlContent);
+    final colorValues = appState.extractColorValues(appState.htmlContent);
+    appState.isColorDifferent = colorValues.any((color) => color != "#00c600");
+    String shortNameStartCity = appState.shortName(appState.startCity);
+    String shortNameEndCity = appState.shortName(appState.endCity);
+    if (appState.isColorDifferent) {
+      NotificationService().showNotification("Rainy Road",
+          "Haverá chuva no caminho entre $shortNameStartCity e $shortNameEndCity");
+    } else {
+      NotificationService().showNotification("Rainy Road",
+          "Sem chuvas no caminho entre $shortNameStartCity e $shortNameEndCity");
+    }
+  } catch (error) {
+    developer.log(error.toString());
+  }
+}
 
 @pragma('vm:entry-point')
-void showNotification() {
-  debugPrint("triggered the Alarm");
+void setNotification(int id) {
+  developer.log("triggered the Alarm");
   MyAppState appState = MyAppState();
-  appState.loadSettings().then((value) {
-    MyAlarmManager().shouldRunToday().then((value) async {
+  appState.loadSettings().then((_) {
+    MyAlarmManager()
+        .alarmDateTime(id)
+        .then((value) => appState.initAlarm(value, id));
+    MyAlarmManager().shouldRunToday(id).then((value) async {
       if (value) {
-        try {
-          appState.response = await http.get(Uri.parse(
-              '${appState.server}/generate_map?start_location=${appState.startCity}&end_location=${appState.endCity}}'));
-          appState.htmlContent = appState.response.body;
-          appState.controller.loadHtmlString(appState.htmlContent);
-          final colorValues = appState.extractColorValues(appState.htmlContent);
-          appState.isColorDifferent =
-              colorValues.any((color) => color != "#00c600");
-          if (appState.isColorDifferent) {
-            NotificationService()
-                .showNotification("Rainy Road", "Haverá chuvas no caminho");
-          } else {
-            NotificationService()
-                .showNotification("Rainy Road", "Sem chuvas no caminho");
-          }
-        } catch (error) {
-          debugPrint(error.toString());
-        }
+        developer.log("Running Alarm $id");
+        showNotification(appState);
       }
     });
   });
 }
 
-main() async {
+main() {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initialize();
-  await AndroidAlarmManager.initialize();
   runApp(const RainyRoadApp());
-  var date = MyAlarmManager().alarmDateTime();
-  AndroidAlarmManager.periodic(
-    allowWhileIdle: true,
-    rescheduleOnReboot: true,
-    wakeup: true,
-    startAt: await date,
-    const Duration(days: 1),
-    0,
-    showNotification,
-  );
 }
 
 class RainyRoadApp extends StatelessWidget {
@@ -97,13 +95,13 @@ class _MapScreenState extends State<MapScreen> {
   @override
   initState() {
     super.initState();
+    AndroidAlarmManager.initialize();
     UpdateChecker().checkForUpdates(context);
     appState.loadCities();
     appState.loadSettings().then((_) => setState(() {
           _startLocationController.text = appState.startCity;
           _endLocationController.text = appState.endCity;
         }));
-    appState.initNotifications();
   }
 
   @override
@@ -144,12 +142,15 @@ class _MapScreenState extends State<MapScreen> {
                           children: [
                             const SizedBox(width: 230),
                             IconButton(
-                                onPressed: () => appState.openSettings(context),
+                                onPressed: () => setState(() {
+                                      appState.openSettings(context);
+                                    }),
                                 icon: const Icon(Icons.settings)),
                           ],
                         ),
                         TypeAheadField(
-                          hideOnEmpty: true,
+                          emptyBuilder: (context) =>
+                              const Text('Insira o nome da cidade de partida'),
                           builder: (context, controller, focusNode) {
                             return TextFormField(
                               controller: controller,
@@ -187,13 +188,15 @@ class _MapScreenState extends State<MapScreen> {
                         ),
                         const SizedBox(height: 16.0),
                         TypeAheadField(
+                            emptyBuilder: (context) => const Text(
+                                'Insira o nome da cidade de destino'),
                             builder: (context, controller, focusNode) {
                               return TextFormField(
                                 controller: controller,
                                 focusNode: focusNode,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Insira uma cidade';
+                                    return 'Insira outra cidade';
                                   }
                                   return null;
                                 },
@@ -302,29 +305,41 @@ class MyAppState extends ChangeNotifier {
     ..setNavigationDelegate(
       NavigationDelegate(
         onProgress: (int progress) {
-          debugPrint(progress.toString());
+          developer.log(progress.toString());
         },
       ),
     );
   bool isColorDifferent = false;
   bool isLoading = false;
   String startCity = "";
+  bool alarmTwoEnabled = false;
   String endCity = "";
   String htmlContent = "";
-  PermissionStatus status = PermissionStatus.denied;
   String server = "http://";
   List<String> citiesList = List.empty();
   http.Response response = http.Response("", 404);
 
+  void initAlarm(DateTime date, int id) {
+    developer.log("Novo alarme $id em : ${date.toString()}");
+    AndroidAlarmManager.oneShotAt(
+      alarmClock: true,
+      date,
+      allowWhileIdle: true,
+      rescheduleOnReboot: true,
+      wakeup: true,
+      id,
+      setNotification,
+    );
+  }
+
   Future<void> loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.reload();
+    alarmTwoEnabled = prefs.getBool("alarmTwoEnabled") ?? false;
     endCity = prefs.getString('end') ?? '';
     startCity = prefs.getString('start') ?? '';
     server = prefs.getString('server') ?? 'http://';
-  }
-
-  Future<void> initNotifications() async {
-    status = await Permission.notification.request();
+    notifyListeners();
   }
 
   Future<void> saveSettings() async {
@@ -339,7 +354,7 @@ class MyAppState extends ChangeNotifier {
       final String contents = await rootBundle.loadString(citiesAssetPath);
       citiesList = contents.split('\n').map((line) => line.trim()).toList();
     } catch (e) {
-      debugPrint('Error loading cities: $e');
+      developer.log('Error loading cities: $e');
     }
   }
 
@@ -366,14 +381,12 @@ class MyAppState extends ChangeNotifier {
         SnackBar(
           backgroundColor: Colors.red,
           content: Text(
-              'Erro na conexão com o servidor\n ${error.toString().substring(0, 25)}...'),
+              'Erro na conexão com o servidor\n ${error.toString().substring(0, 50)}...'),
         ),
       );
     }
     if (response.statusCode == 200) {
       htmlContent = response.body;
-
-      // Check if any color is different from "#3388ff"
       controller.loadHtmlString(htmlContent);
       final colorValues = extractColorValues(htmlContent);
       isColorDifferent = colorValues.any((color) => color != "#00c600");
@@ -398,7 +411,6 @@ class MyAppState extends ChangeNotifier {
     }
     if (response.statusCode == 507) {
       htmlContent = response.body;
-
       controller.loadHtmlString(htmlContent);
       isLoading = false;
       notifyListeners();
@@ -416,17 +428,14 @@ class MyAppState extends ChangeNotifier {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const SettingsScreen()),
-    ).then((_) => MyAlarmManager()
-        .alarmDateTime()
-        .then((value) => AndroidAlarmManager.periodic(
-              allowWhileIdle: true,
-              rescheduleOnReboot: true,
-              wakeup: true,
-              startAt: value,
-              const Duration(days: 1),
-              0,
-              showNotification,
-            )));
+    ).then((_) {
+      loadSettings();
+      MyAlarmManager().alarmDateTime(1).then((value) => initAlarm(value, 1));
+      if (alarmTwoEnabled) {
+        MyAlarmManager().alarmDateTime(2).then((value) => initAlarm(value, 2));
+      }
+    });
+    notifyListeners();
   }
 
   List<String> extractColorValues(String content) {
@@ -440,6 +449,14 @@ class MyAppState extends ChangeNotifier {
     }
 
     return colorValues;
+  }
+
+  String shortName(String input) {
+    if (input.contains(',')) {
+      return input.substring(0, input.indexOf(','));
+    } else {
+      return input;
+    }
   }
 }
 
