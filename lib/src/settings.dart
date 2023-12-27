@@ -12,24 +12,22 @@ void main() {
   runApp(const SettingsScreen());
 }
 
-enum Calendar { everyday, workweek, weekend }
+enum Calendar { everyDay, workDays, weekEnds }
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _serverController = TextEditingController();
-  bool everyday = false;
-  bool workweek = false;
-  bool weekend = false;
+  String frequency = '';
+
   bool enableRepSettings = false;
-  Calendar calendarView = Calendar.everyday;
+  Calendar calendarView = Calendar.everyDay;
   TimeOfDay selectedTime = TimeOfDay.now();
   final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _loadSettings();
-    setState(() {
-      _controller.text = '${selectedTime.hour}:${selectedTime.minute}';
-    });
+    _loadSettings().then((value) => setState(() {
+          _controller.text = '${selectedTime.hour}:${selectedTime.minute}';
+        }));
   }
 
   final MaterialStateProperty<Icon?> thumbIcon =
@@ -83,15 +81,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SegmentedButton<Calendar>(
                 segments: const <ButtonSegment<Calendar>>[
                   ButtonSegment<Calendar>(
-                      value: Calendar.everyday,
+                      value: Calendar.everyDay,
                       label: Text('Diário'),
                       icon: Icon(Icons.calendar_view_day)),
                   ButtonSegment<Calendar>(
-                      value: Calendar.workweek,
+                      value: Calendar.workDays,
                       label: Text('Seg-Sex'),
                       icon: Icon(Icons.calendar_view_week)),
                   ButtonSegment<Calendar>(
-                      value: Calendar.weekend,
+                      value: Calendar.weekEnds,
                       label: Text('Sab-Dom'),
                       icon: Icon(Icons.calendar_view_month)),
                 ],
@@ -141,9 +139,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _serverController.text = prefs.getString('server') ?? "http://";
       enableRepSettings = prefs.getBool('enableRepSettings') ?? false;
-      everyday = prefs.getBool('everyday') ?? false;
-      weekend = prefs.getBool('weekend') ?? false;
-      workweek = prefs.getBool('workweek') ?? false;
+      frequency = prefs.getString('frequency') ?? "";
+
       final savedHour = prefs.getInt('selectedHour') ?? TimeOfDay.now().hour;
       final savedMinute =
           prefs.getInt('selectedMinute') ?? TimeOfDay.now().minute;
@@ -152,21 +149,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _saveSettings() async {
-    if (calendarView == Calendar.everyday) {
-      everyday = true;
-    } else if (calendarView == Calendar.workweek) {
-      workweek = true;
-    } else if (calendarView == Calendar.weekend) {
-      weekend = true;
+    switch (calendarView) {
+      case Calendar.everyDay:
+        frequency = 'everyDay';
+        break;
+      case Calendar.workDays:
+        frequency = 'workDays';
+        break;
+      case Calendar.weekEnds:
+        frequency = 'weekEnds';
+        break;
+      // Add more cases if needed
+      default:
+        // Default case if none of the above matches
+        frequency = '';
     }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
       prefs.setBool('enableRepSettings', enableRepSettings);
       prefs.setString('server', _serverController.text);
-      prefs.setBool('everyday', everyday);
-      prefs.setBool('weekend', weekend);
-      prefs.setBool('workweek', workweek);
+      prefs.setString('frequency', frequency);
       prefs.setInt('selectedHour', selectedTime.hour);
       prefs.setInt('selectedMinute', selectedTime.minute);
     });
