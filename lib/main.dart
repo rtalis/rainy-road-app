@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'dart:developer' as developer;
 
 Future<void> showNotification(MyAppState appState) async {
@@ -102,6 +103,7 @@ class _MapScreenState extends State<MapScreen> {
           _startLocationController.text = appState.startCity;
           _endLocationController.text = appState.endCity;
         }));
+    appState.checkBetteryOptimization();
   }
 
   @override
@@ -422,6 +424,24 @@ class MyAppState extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  void checkBetteryOptimization() async {
+    bool? isBatteryOptimizationDisabled =
+        await DisableBatteryOptimization.isBatteryOptimizationDisabled;
+    developer.log(isBatteryOptimizationDisabled.toString());
+    if (isBatteryOptimizationDisabled ?? true) {
+      await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+    }
+    bool? isManBatteryOptimizationDisabled = await DisableBatteryOptimization
+        .isManufacturerBatteryOptimizationDisabled;
+    developer.log(isManBatteryOptimizationDisabled.toString());
+    if (isManBatteryOptimizationDisabled ?? true) {
+      await DisableBatteryOptimization
+          .showDisableManufacturerBatteryOptimizationSettings(
+              "Your device has additional battery optimization",
+              "Follow the steps and disable the optimizations to allow smooth functioning of this app");
+    }
   }
 
   void openSettings(var context) {

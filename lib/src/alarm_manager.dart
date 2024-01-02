@@ -28,6 +28,7 @@ class MyAlarmManager {
 
   Future<bool> shouldRunToday(int id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     String work = "";
     if (id == 1) {
       work = "frequency";

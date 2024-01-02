@@ -45,6 +45,7 @@ dependencies:
   flutter_local_notifications: ^16.2.0
   android_alarm_manager_plus: ^3.0.4 
   provider: ^6.1.1
+  disable_battery_optimization: ^1.1.1
 
 dev_dependencies:
   flutter_test:
@@ -68,8 +69,7 @@ flutter_icons:
 flutter:
 
   assets:
-    - assets/images/bg.png
-    - assets/text/cities.txt
+    - assets/images/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
