@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   TimeOfDay selectedTimeTwo = TimeOfDay.now();
   final TextEditingController _controllerTwo = TextEditingController();
   final TextEditingController _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -66,24 +69,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 controller: _serverController,
                 decoration: const InputDecoration(label: Text("Endereço"))),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("Habilitar repetições"),
-                Switch(
-                  thumbIcon: thumbIcon,
-                  value: repEnabled,
-                  onChanged: (bool value) {
-                    setState(() {
-                      Permission.notification.request().then((status) {
-                        if (status != PermissionStatus.denied) {
-                          repEnabled = value;
+            ListTile(
+              contentPadding: const EdgeInsets.all(0),
+              title: const Text('Habilitar notificações'),
+              subtitle: const Text(
+                'Defina um horário para notificações automáticas',
+              ),
+              trailing: Switch(
+                thumbIcon: thumbIcon,
+                value: repEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    Permission.notification.request().then((status) {
+                      if (status != PermissionStatus.denied) {
+                        if (value == true) {
+                          showDisableEnergySavingMessage();
                         }
-                      });
+                        repEnabled = value;
+                        setState(() {});
+                      }
                     });
-                  },
-                ),
-              ],
+                  });
+                },
+              ),
             ),
             const SizedBox(height: 20),
             if (repEnabled) ...[
@@ -311,5 +319,55 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _saveSettings();
       });
     }
+  }
+
+  void showDisableEnergySavingMessage() {
+    bool energySavingMessageEnabled = false;
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            Timer t = Timer(const Duration(seconds: 5), () async {
+              setState(() {
+                energySavingMessageEnabled = true;
+              });
+            });
+            return AlertDialog(
+              title: const Text('Atenção'),
+              content: SizedBox(
+                height: 400,
+                width: 400,
+                child: Column(
+                  children: [
+                    const Text(
+                        "Devido a economia de energia do Android, é necessário desativar a otimização de energia para este aplicativo."),
+                    const SizedBox(height: 20),
+                    Image.asset(
+                        'assets/images/battery-optmization-disable.gif'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  style: energySavingMessageEnabled
+                      ? ElevatedButton.styleFrom(backgroundColor: Colors.white)
+                      : ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  onPressed: energySavingMessageEnabled
+                      ? () {
+                          t.cancel();
+                          Navigator.of(context).pop();
+                        }
+                      : null,
+                  child: const Text("Fechar"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
