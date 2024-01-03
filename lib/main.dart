@@ -130,7 +130,7 @@ class _MapScreenState extends State<MapScreen> {
             child: Center(
               child: FrostedGlassBox(
                 width: 300.0,
-                height: 288.0,
+                height: 228.0,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Form(
@@ -138,16 +138,6 @@ class _MapScreenState extends State<MapScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            const SizedBox(width: 230),
-                            IconButton(
-                                onPressed: () => setState(() {
-                                      appState.openSettings(context);
-                                    }),
-                                icon: const Icon(Icons.settings)),
-                          ],
-                        ),
                         TypeAheadField(
                           emptyBuilder: (context) =>
                               const Text('Insira o nome da cidade de partida'),
@@ -225,34 +215,46 @@ class _MapScreenState extends State<MapScreen> {
                               _endLocationController.text = suggestion;
                             }),
                         const SizedBox(height: 16.0),
-                        ElevatedButton.icon(
-                          icon: Icon(Icons.thunderstorm),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              appState.endCity = _endLocationController.text;
-                              appState.startCity =
-                                  _startLocationController.text;
-                              if (_endLocationController.text ==
-                                  _startLocationController.text) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    backgroundColor: Colors.red,
-                                    content: Text(
-                                        'Digite o nome de cidades diferentes'),
-                                  ),
-                                );
-                              } else {
-                                setState(() {});
-                                appState
-                                    .generateMap(context)
-                                    .then((_) => setState(() {}));
-                                appState.saveSettings();
-                              }
-                            }
-                          },
-                          label: const Text('Verificar rota'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 65),
+                            ElevatedButton.icon(
+                              icon: const Icon(Icons.thunderstorm),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  appState.endCity =
+                                      _endLocationController.text;
+                                  appState.startCity =
+                                      _startLocationController.text;
+                                  if (_endLocationController.text ==
+                                      _startLocationController.text) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text(
+                                            'Digite o nome de cidades diferentes'),
+                                      ),
+                                    );
+                                  } else {
+                                    setState(() {});
+                                    appState
+                                        .generateMap(context)
+                                        .then((_) => setState(() {}));
+                                    appState.saveSettings();
+                                  }
+                                }
+                              },
+                              label: const Text('Verificar rota'),
+                            ),
+                            const SizedBox(width: 15),
+                            IconButton(
+                                onPressed: () => setState(() {
+                                      appState.openSettings(context);
+                                    }),
+                                icon: const Icon(Icons.settings))
+                          ],
                         ),
-                        const SizedBox(height: 16.0),
                       ],
                     ),
                   ),

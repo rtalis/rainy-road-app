@@ -186,9 +186,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     content: Text('Configurações salvas'),
                   ),
                 );
-                Future.delayed(const Duration(seconds: 3)).then(
-                  (_) => Navigator.pop(context),
-                );
+                Navigator.pop(context);
               },
             ),
           ],
@@ -323,17 +321,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void showDisableEnergySavingMessage() {
     bool energySavingMessageEnabled = false;
-
+    int counter = 5;
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            Timer t = Timer(const Duration(seconds: 5), () async {
-              setState(() {
+            Timer t = Timer.periodic(const Duration(seconds: 1), (t) {
+              if (counter > 0) {
+                counter--;
+                setState(() {});
+              } else {
                 energySavingMessageEnabled = true;
-              });
+                t.cancel();
+              }
             });
             return AlertDialog(
               title: const Text('Atenção'),
@@ -361,7 +363,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Navigator.of(context).pop();
                         }
                       : null,
-                  child: const Text("Fechar"),
+                  child: energySavingMessageEnabled
+                      ? const Text("Fechar")
+                      : Text("Fechar ($counter)"),
                 ),
               ],
             );
