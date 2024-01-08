@@ -382,9 +382,10 @@ class MyAppState extends ChangeNotifier {
       notifyListeners();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          duration: const Duration(seconds: 6),
           backgroundColor: Colors.red,
           content: Text(
-              'Erro na conexão com o servidor\n ${error.toString().substring(0, 50)}...'),
+              'Erro na conexão com o servidor\n ${error.toString().substring(0, 70)}...'),
         ),
       );
     }
@@ -408,11 +409,7 @@ class MyAppState extends ChangeNotifier {
           ),
         );
       }
-
-      isLoading = false;
-      notifyListeners();
-    }
-    if (response.statusCode == 507) {
+    } else if (response.statusCode == 507) {
       htmlContent = response.body;
       controller.loadHtmlString(htmlContent);
       isLoading = false;
@@ -423,7 +420,43 @@ class MyAppState extends ChangeNotifier {
           content: Text('Servidor sem memória para esta requisição'),
         ),
       );
+    } else if (response.statusCode == 500) {
+      htmlContent = response.body;
+      controller.loadHtmlString(htmlContent);
+      isLoading = false;
+      notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Ocorreu um erro com esta requisição'),
+        ),
+      );
+    } else {
+      try {
+        htmlContent = response.body;
+        controller.loadHtmlString(htmlContent);
+        notifyListeners();
+        isLoading = false;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Ocorreu um erro com esta requisição'),
+          ),
+        );
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+                'Erro na resposta do servidor \n ${error.toString().substring(0, 70)}...'),
+          ),
+        );
+        isLoading = false;
+      }
     }
+
+    isLoading = false;
     notifyListeners();
   }
 
