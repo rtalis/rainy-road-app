@@ -104,11 +104,30 @@ class _MapScreenState extends State<MapScreen> {
         }));
   }
 
+  void handleClick(int item) {
+    switch (item) {
+      case 0:
+        appState.showMessageDialog("title", "text", 0, context);
+        break;
+      case 1:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rainy Road App'),
+        actions: <Widget>[
+          PopupMenuButton<int>(
+            onSelected: (item) => handleClick(item),
+            itemBuilder: (context) => [
+              const PopupMenuItem<int>(value: 0, child: Text('Ajuda')),
+              const PopupMenuItem<int>(value: 1, child: Text('Sobre')),
+            ],
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -322,6 +341,54 @@ class MyAppState extends ChangeNotifier {
   List<String> citiesList = List.empty();
   http.Response response = http.Response("", 404);
 
+  void showMessageDialog(
+      String title, String text, int timeToContinue, BuildContext context) {
+    bool allowContinue = true;
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            if (timeToContinue > 0) {
+              setState(() {
+                allowContinue = false;
+              });
+              Future.delayed(Duration(seconds: timeToContinue)).then((_) {
+                allowContinue = true;
+                timeToContinue = 0;
+                setState(() {});
+              });
+            }
+            return AlertDialog(
+              //backgroundColor: Colors.transparent,
+              title: Text(title),
+              content: Center(
+                heightFactor: 2.0,
+                child: Text(text),
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  style: allowContinue
+                      ? ElevatedButton.styleFrom(backgroundColor: Colors.white)
+                      : ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  onPressed: allowContinue
+                      ? () {
+                          Navigator.of(context).maybePop();
+                        }
+                      : null,
+                  child: allowContinue
+                      ? const Text("Continuar")
+                      : const Text("Aguarde..."),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   void initAlarm(DateTime date, int id) {
     developer.log("Novo alarme $id em : ${date.toString()}");
     AndroidAlarmManager.oneShotAt(
@@ -437,7 +504,6 @@ class MyAppState extends ChangeNotifier {
         controller.loadHtmlString(htmlContent);
         notifyListeners();
         isLoading = false;
-
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
