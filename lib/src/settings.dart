@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:android_power_manager/android_power_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rainy_road_app/src/frosted_glass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer' as developer;
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -83,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Permission.notification.request().then((status) {
                       if (status != PermissionStatus.denied) {
                         if (value == true) {
-                          showDisableEnergySavingMessage();
+                          disableEnergyPowerSaving();
                         }
                         repEnabled = value;
                         setState(() {});
@@ -319,53 +322,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  void showDisableEnergySavingMessage() {
-    bool energySavingMessageEnabled = false;
-    int counter = 5;
+  void showMessageDialog(String title, String text, int timeToContinue) {
+    bool allowContinue = true;
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            Timer t = Timer.periodic(const Duration(seconds: 1), (t) {
-              if (counter > 0) {
-                counter--;
+            if (timeToContinue > 0) {
+              setState(() {
+                allowContinue = false;
+              });
+              Future.delayed(Duration(seconds: timeToContinue)).then((_) {
+                allowContinue = true;
+                timeToContinue = 0;
                 setState(() {});
-              } else {
-                energySavingMessageEnabled = true;
-                t.cancel();
-              }
-            });
+              });
+            }
             return AlertDialog(
-              title: const Text('Atenção'),
-              content: SizedBox(
-                height: 400,
-                width: 400,
-                child: Column(
-                  children: [
-                    const Text(
-                        "Devido a economia de energia do Android, é necessário desativar a otimização de energia para este aplicativo."),
-                    const SizedBox(height: 20),
-                    Image.asset(
-                        'assets/images/battery-optmization-disable.gif'),
-                  ],
-                ),
+              //backgroundColor: Colors.transparent,
+              title: Text(title),
+              content: Center(
+                heightFactor: 2.0,
+                child: Text(text),
               ),
               actions: <Widget>[
                 ElevatedButton(
-                  style: energySavingMessageEnabled
+                  style: allowContinue
                       ? ElevatedButton.styleFrom(backgroundColor: Colors.white)
                       : ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                  onPressed: energySavingMessageEnabled
+                  onPressed: allowContinue
                       ? () {
-                          t.cancel();
-                          Navigator.of(context).pop();
+                          Navigator.of(context).maybePop();
                         }
                       : null,
-                  child: energySavingMessageEnabled
-                      ? const Text("Fechar")
-                      : Text("Fechar ($counter)"),
+                  child: allowContinue
+                      ? const Text("Continuar")
+                      : const Text("Aguarde..."),
                 ),
               ],
             );
@@ -373,5 +367,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       },
     );
+  }
+
+  void disableEnergyPowerSaving() async {
+    var status = await Permission.ignoreBatteryOptimizations.status;
+    developer.log("status: $status");
+    if (status.isGranted) {
+      developer.log(
+          "isIgnoring: ${(await AndroidPowerManager.isIgnoringBatteryOptimizations)}");
+      bool isIgnoring =
+          await AndroidPowerManager.isIgnoringBatteryOptimizations ?? true;
+      if (isIgnoring) {
+        AndroidPowerManager.requestIgnoreBatteryOptimizations();
+      }
+    } else {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.ignoreBatteryOptimizations,
+      ].request();
+      developer.log(
+          "permission value: ${statuses[Permission.ignoreBatteryOptimizations]}");
+      if (statuses[Permission.ignoreBatteryOptimizations]!.isGranted) {
+        AndroidPowerManager.requestIgnoreBatteryOptimizations();
+      } else {
+        showMessageDialog(
+            "Atenção",
+            "O aplicativo não notificará no horário correto caso você não permita a execução em segundo plano.",
+            5);
+      }
+    }
   }
 }

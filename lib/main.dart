@@ -437,7 +437,6 @@ class MyAppState extends ChangeNotifier {
         controller.loadHtmlString(htmlContent);
         notifyListeners();
         isLoading = false;
-
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
