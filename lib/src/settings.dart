@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:android_power_manager/android_power_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rainy_road_app/main.dart';
 import 'package:rainy_road_app/src/frosted_glass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
@@ -28,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool repEnabled = false;
   Calendar calendarView = Calendar.everyDay;
   Calendar calendarViewTwo = Calendar.everyDay;
-
+  MyAppState appState = MyAppState();
   TimeOfDay selectedTime = TimeOfDay.now();
   TimeOfDay selectedTimeTwo = TimeOfDay.now();
   final TextEditingController _controllerTwo = TextEditingController();
@@ -74,9 +75,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 30),
             ListTile(
               contentPadding: const EdgeInsets.all(0),
-              title: const Text('Habilitar notificações'),
+              title: const Text('Verificações automáticas'),
               subtitle: const Text(
-                'Defina um horário para notificações automáticas',
+                'Defina até dois horários para receber as notificações de tempo',
+                textScaler: TextScaler.linear(0.8),
               ),
               trailing: Switch(
                 thumbIcon: thumbIcon,
@@ -322,53 +324,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  void showMessageDialog(String title, String text, int timeToContinue) {
-    bool allowContinue = true;
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            if (timeToContinue > 0) {
-              setState(() {
-                allowContinue = false;
-              });
-              Future.delayed(Duration(seconds: timeToContinue)).then((_) {
-                allowContinue = true;
-                timeToContinue = 0;
-                setState(() {});
-              });
-            }
-            return AlertDialog(
-              //backgroundColor: Colors.transparent,
-              title: Text(title),
-              content: Center(
-                heightFactor: 2.0,
-                child: Text(text),
-              ),
-              actions: <Widget>[
-                ElevatedButton(
-                  style: allowContinue
-                      ? ElevatedButton.styleFrom(backgroundColor: Colors.white)
-                      : ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                  onPressed: allowContinue
-                      ? () {
-                          Navigator.of(context).maybePop();
-                        }
-                      : null,
-                  child: allowContinue
-                      ? const Text("Continuar")
-                      : const Text("Aguarde..."),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
   void disableEnergyPowerSaving() async {
     var status = await Permission.ignoreBatteryOptimizations.status;
     developer.log("status: $status");
@@ -388,11 +343,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           "permission value: ${statuses[Permission.ignoreBatteryOptimizations]}");
       if (statuses[Permission.ignoreBatteryOptimizations]!.isGranted) {
         AndroidPowerManager.requestIgnoreBatteryOptimizations();
-      } else {
-        showMessageDialog(
+      } else if (context.mounted) {
+        appState.showMessageDialog(
             "Atenção",
             "O aplicativo não notificará no horário correto caso você não permita a execução em segundo plano.",
-            5);
+            5,
+            context);
       }
     }
   }
