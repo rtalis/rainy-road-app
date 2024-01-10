@@ -1,4 +1,4 @@
-package com.example.rainy_road_app
+package com.rtalis.rainy_road_app
 
 import io.flutter.embedding.android.FlutterActivity
 

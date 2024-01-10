@@ -114,7 +114,7 @@ class _MapScreenState extends State<MapScreen> {
         String texto = """
         Primeiramente defina o servidor nas configurações, ele deve ser compativel com o serviço disponível em: https://github.com/rtalis/rainy-road.
 
-        Coloque a cidade de partida no primeiro campo e a cidade de chegada no segundo campo. O Aplicativo irá verificar em vários pontos neste trajeto se existe chuva. 
+        Coloque a cidade de partida no primeiro campo e a cidade de destino no segundo campo. O Aplicativo irá verificar em vários pontos neste trajeto se existe chuva. 
       
         Você pode definir até dois horários para receber notificações automáticas sobre o ultimo trajeto verificado nas configurações.
       """;
