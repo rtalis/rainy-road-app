@@ -4,7 +4,6 @@ import 'package:android_power_manager/android_power_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rainy_road_app/main.dart';
-import 'package:rainy_road_app/src/frosted_glass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 
