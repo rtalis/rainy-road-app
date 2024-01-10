@@ -26,11 +26,15 @@ Future<void> showNotification(MyAppState appState) async {
     String shortNameStartCity = appState.shortName(appState.startCity);
     String shortNameEndCity = appState.shortName(appState.endCity);
     if (appState.isColorDifferent) {
-      NotificationService().showNotification("Rainy Road",
-          "Haverá chuva no caminho entre $shortNameStartCity e $shortNameEndCity");
+      NotificationService().showNotification(
+          "Chuvas - Rainy Road",
+          "Haverá chuva no caminho entre $shortNameStartCity e $shortNameEndCity",
+          'ic_stat_rr');
     } else {
-      NotificationService().showNotification("Rainy Road",
-          "Sem chuvas no caminho entre $shortNameStartCity e $shortNameEndCity");
+      NotificationService().showNotification(
+          "Sem chuvas - Rainy Road",
+          "Sem chuvas no caminho entre $shortNameStartCity e $shortNameEndCity",
+          'ic_stat_rr_sun');
     }
   } catch (error) {
     developer.log(error.toString());

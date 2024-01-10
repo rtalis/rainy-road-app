@@ -14,9 +14,10 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  Future<void> showNotification(String title, String body, String icon) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
+      icon: icon,
       fullScreenIntent: true,
       'high_importance_channel',
       'This channel is used for important notifications.',
@@ -24,7 +25,7 @@ class NotificationService {
       priority: Priority.high,
     );
 
-    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
