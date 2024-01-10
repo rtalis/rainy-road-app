@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -107,9 +108,33 @@ class _MapScreenState extends State<MapScreen> {
   void handleClick(int item) {
     switch (item) {
       case 0:
-        appState.showMessageDialog("title", "text", 0, context);
+        String texto = """
+        Primeiramente defina o servidor nas configurações, ele deve ser compativel com o serviço disponível em: https://github.com/rtalis/rainy-road.
+
+        Coloque a cidade de partida no primeiro campo e a cidade de chegada no segundo campo. O Aplicativo irá verificar em vários pontos neste trajeto se existe chuva. 
+      
+        Você pode definir até dois horários para receber notificações automáticas sobre o ultimo trajeto verificado nas configurações.
+      """;
+        appState.showMessageDialog(
+            "Usando o app",
+            Text(
+              texto,
+              textAlign: TextAlign.justify,
+            ),
+            0,
+            context);
+
         break;
       case 1:
+        showAboutDialog(context: context, children: <Widget>[
+          const Center(
+              child: Text(
+                  "Evitando que você pegue chuvas inesperadas no seu trajeto.")),
+          const SizedBox(
+            height: 20,
+          ),
+          const Center(child: Text("Feito por Ronaldo Talison"))
+        ]);
         break;
     }
   }
@@ -342,7 +367,7 @@ class MyAppState extends ChangeNotifier {
   http.Response response = http.Response("", 404);
 
   void showMessageDialog(
-      String title, String text, int timeToContinue, BuildContext context) {
+      String title, Widget widget, int timeToContinue, BuildContext context) {
     bool allowContinue = true;
     showDialog(
       barrierDismissible: false,
@@ -363,10 +388,8 @@ class MyAppState extends ChangeNotifier {
             return AlertDialog(
               //backgroundColor: Colors.transparent,
               title: Text(title),
-              content: Center(
-                heightFactor: 2.0,
-                child: Text(text),
-              ),
+              content: widget,
+
               actions: <Widget>[
                 ElevatedButton(
                   style: allowContinue

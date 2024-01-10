@@ -346,7 +346,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       } else if (context.mounted) {
         appState.showMessageDialog(
             "Atenção",
-            "O aplicativo não notificará no horário correto caso você não permita a execução em segundo plano.",
+            const Text(
+                "O aplicativo poderá não notificar no horário correto caso você não permita a execução em segundo plano."),
             5,
             context);
       }
