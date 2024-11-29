@@ -1,0 +1,349 @@
+-- Merging decision tree log ---
+application
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:11:5-57:19
+MERGED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-14:19
+MERGED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-14:19
+MERGED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
+MERGED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/talison/.gradle/caches/transforms-3/f87d67599aa47d0f756ed6682d31418b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/talison/.gradle/caches/transforms-3/f87d67599aa47d0f756ed6682d31418b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+	android:name
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+manifest
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+MERGED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+MERGED from [:android_alarm_manager_plus] /home/talison/dev/rainy-road-app/build/android_alarm_manager_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:android_power_manager] /home/talison/dev/rainy-road-app/build/android_power_manager/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_keyboard_visibility] /home/talison/dev/rainy-road-app/build/flutter_keyboard_visibility/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-12:12
+MERGED from [:package_info_plus] /home/talison/dev/rainy-road-app/build/package_info_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:permission_handler_android] /home/talison/dev/rainy-road-app/build/permission_handler_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:shared_preferences_android] /home/talison/dev/rainy-road-app/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-16:12
+MERGED from [:webview_flutter_android] /home/talison/dev/rainy-road-app/build/webview_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/talison/.gradle/caches/transforms-3/745c54a06b39032ecf79af872d1be447/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/talison/.gradle/caches/transforms-3/b58d889aac3b6c7910b1edc061b071f5/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] /home/talison/.gradle/caches/transforms-3/81f0f59557e5742bd439d46af7ddef99/transformed/jetified-datastore-preferences-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.datastore:datastore:1.0.0] /home/talison/.gradle/caches/transforms-3/951c177121f9672213968ca8d42f0f56/transformed/jetified-datastore-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.media:media:1.1.0] /home/talison/.gradle/caches/transforms-3/e4de9a3525f937a8f6d4da271d131f22/transformed/media-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.browser:browser:1.8.0] /home/talison/.gradle/caches/transforms-3/ace8718e1e596c29b0cfe40657a3f0f0/transformed/browser-1.8.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.webkit:webkit:1.12.1] /home/talison/.gradle/caches/transforms-3/b126e3d03f2e86d4fe38fbad4ffc4037/transformed/webkit-1.12.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.window:window-java:1.2.0] /home/talison/.gradle/caches/transforms-3/55d814a1576734ac880dca6a01e1ced3/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:17:1-21:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/talison/.gradle/caches/transforms-3/2eb397ea2a6c6bf611879f3c46dd7fa3/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/talison/.gradle/caches/transforms-3/260235fed445a1f5617cad825ba29928/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.fragment:fragment:1.7.1] /home/talison/.gradle/caches/transforms-3/60844366ea525d13fb1a11c2396bc3b3/transformed/fragment-1.7.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.8.1] /home/talison/.gradle/caches/transforms-3/0b873d82c2231ea2845c8f6b1288179a/transformed/jetified-activity-1.8.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/talison/.gradle/caches/transforms-3/28a7104ce44bf45ce7a21c1a4781dd8d/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/talison/.gradle/caches/transforms-3/97c5658d761da2daf3d8730874d46c5d/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/talison/.gradle/caches/transforms-3/cdf507c0d95e86e37c743abfbfafa376/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/talison/.gradle/caches/transforms-3/c1fde2040a24ca66ac00d364336a7009/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/talison/.gradle/caches/transforms-3/53e5082e3f9fdccc9f2e8388f2a87ea4/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/talison/.gradle/caches/transforms-3/7b9eabbb4830e24e0297ed494c592500/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/talison/.gradle/caches/transforms-3/8b8015088b2c08b7ad07b06ff4793fb7/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/talison/.gradle/caches/transforms-3/bea0671078170bf928699b787da27711/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.13.1] /home/talison/.gradle/caches/transforms-3/8f4c693ea9f357397f7dade6a8d12b85/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/talison/.gradle/caches/transforms-3/667639e579456fc09819f28da8c92386/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/talison/.gradle/caches/transforms-3/382ab80d0c92ad37ad75ad04c7e9340d/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/talison/.gradle/caches/transforms-3/d48dc23c7880bf86276a91bfbb9996e2/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] /home/talison/.gradle/caches/transforms-3/b9d97fb34451343f9430e1aa7073afa6/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.2.0] /home/talison/.gradle/caches/transforms-3/fc740ce8f988fd64f49c90401667f4c5/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/talison/.gradle/caches/transforms-3/dbce0d73524d10cf4919bcde513070df/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/talison/.gradle/caches/transforms-3/d05da532477649963fa3e82d58e0a3a9/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/talison/.gradle/caches/transforms-3/f87d67599aa47d0f756ed6682d31418b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/talison/.gradle/caches/transforms-3/4abfb14423eab8b58a348c08c4a2b0d2/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.window.extensions.core:core:1.0.0] /home/talison/.gradle/caches/transforms-3/89a9d9d57cbd452d47af537aeb6acace/transformed/jetified-core-1.0.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /home/talison/.gradle/caches/transforms-3/4455a4438fb99946695098c367fa0988/transformed/jetified-annotation-experimental-1.4.1/AndroidManifest.xml:2:1-7:12
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+	package
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:1-58:12
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:1:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:2:1-63
+MERGED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:2:1-63
+MERGED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:2:1-63
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:2:18-60
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:3:1-75
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:3:18-72
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:4:1-72
+MERGED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-77
+MERGED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-77
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:4:18-70
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:5:1-76
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:5:18-74
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:6:1-63
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:6:18-61
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:7:1-75
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:7:18-72
+uses-permission#android.permission.USE_EXACT_ALARM
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:8:1-70
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:8:18-67
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:9:1-91
+	android:name
+		ADDED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml:9:18-88
+uses-sdk
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+MERGED from [:android_alarm_manager_plus] /home/talison/dev/rainy-road-app/build/android_alarm_manager_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:android_alarm_manager_plus] /home/talison/dev/rainy-road-app/build/android_alarm_manager_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:android_power_manager] /home/talison/dev/rainy-road-app/build/android_power_manager/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:android_power_manager] /home/talison/dev/rainy-road-app/build/android_power_manager/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_keyboard_visibility] /home/talison/dev/rainy-road-app/build/flutter_keyboard_visibility/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_keyboard_visibility] /home/talison/dev/rainy-road-app/build/flutter_keyboard_visibility/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:package_info_plus] /home/talison/dev/rainy-road-app/build/package_info_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:package_info_plus] /home/talison/dev/rainy-road-app/build/package_info_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:permission_handler_android] /home/talison/dev/rainy-road-app/build/permission_handler_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:permission_handler_android] /home/talison/dev/rainy-road-app/build/permission_handler_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:shared_preferences_android] /home/talison/dev/rainy-road-app/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:shared_preferences_android] /home/talison/dev/rainy-road-app/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:webview_flutter_android] /home/talison/dev/rainy-road-app/build/webview_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:webview_flutter_android] /home/talison/dev/rainy-road-app/build/webview_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/talison/.gradle/caches/transforms-3/745c54a06b39032ecf79af872d1be447/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/talison/.gradle/caches/transforms-3/745c54a06b39032ecf79af872d1be447/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/talison/.gradle/caches/transforms-3/b58d889aac3b6c7910b1edc061b071f5/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/talison/.gradle/caches/transforms-3/b58d889aac3b6c7910b1edc061b071f5/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] /home/talison/.gradle/caches/transforms-3/81f0f59557e5742bd439d46af7ddef99/transformed/jetified-datastore-preferences-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] /home/talison/.gradle/caches/transforms-3/81f0f59557e5742bd439d46af7ddef99/transformed/jetified-datastore-preferences-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] /home/talison/.gradle/caches/transforms-3/951c177121f9672213968ca8d42f0f56/transformed/jetified-datastore-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] /home/talison/.gradle/caches/transforms-3/951c177121f9672213968ca8d42f0f56/transformed/jetified-datastore-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.1.0] /home/talison/.gradle/caches/transforms-3/e4de9a3525f937a8f6d4da271d131f22/transformed/media-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.1.0] /home/talison/.gradle/caches/transforms-3/e4de9a3525f937a8f6d4da271d131f22/transformed/media-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.browser:browser:1.8.0] /home/talison/.gradle/caches/transforms-3/ace8718e1e596c29b0cfe40657a3f0f0/transformed/browser-1.8.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.browser:browser:1.8.0] /home/talison/.gradle/caches/transforms-3/ace8718e1e596c29b0cfe40657a3f0f0/transformed/browser-1.8.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.webkit:webkit:1.12.1] /home/talison/.gradle/caches/transforms-3/b126e3d03f2e86d4fe38fbad4ffc4037/transformed/webkit-1.12.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.webkit:webkit:1.12.1] /home/talison/.gradle/caches/transforms-3/b126e3d03f2e86d4fe38fbad4ffc4037/transformed/webkit-1.12.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window:window-java:1.2.0] /home/talison/.gradle/caches/transforms-3/55d814a1576734ac880dca6a01e1ced3/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
+MERGED from [androidx.window:window-java:1.2.0] /home/talison/.gradle/caches/transforms-3/55d814a1576734ac880dca6a01e1ced3/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/talison/.gradle/caches/transforms-3/2eb397ea2a6c6bf611879f3c46dd7fa3/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/talison/.gradle/caches/transforms-3/2eb397ea2a6c6bf611879f3c46dd7fa3/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/talison/.gradle/caches/transforms-3/260235fed445a1f5617cad825ba29928/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/talison/.gradle/caches/transforms-3/260235fed445a1f5617cad825ba29928/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.fragment:fragment:1.7.1] /home/talison/.gradle/caches/transforms-3/60844366ea525d13fb1a11c2396bc3b3/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.fragment:fragment:1.7.1] /home/talison/.gradle/caches/transforms-3/60844366ea525d13fb1a11c2396bc3b3/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.8.1] /home/talison/.gradle/caches/transforms-3/0b873d82c2231ea2845c8f6b1288179a/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.1] /home/talison/.gradle/caches/transforms-3/0b873d82c2231ea2845c8f6b1288179a/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/talison/.gradle/caches/transforms-3/28a7104ce44bf45ce7a21c1a4781dd8d/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/talison/.gradle/caches/transforms-3/28a7104ce44bf45ce7a21c1a4781dd8d/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/talison/.gradle/caches/transforms-3/97c5658d761da2daf3d8730874d46c5d/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/talison/.gradle/caches/transforms-3/97c5658d761da2daf3d8730874d46c5d/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/talison/.gradle/caches/transforms-3/cdf507c0d95e86e37c743abfbfafa376/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/talison/.gradle/caches/transforms-3/cdf507c0d95e86e37c743abfbfafa376/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/talison/.gradle/caches/transforms-3/c1fde2040a24ca66ac00d364336a7009/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/talison/.gradle/caches/transforms-3/c1fde2040a24ca66ac00d364336a7009/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/talison/.gradle/caches/transforms-3/53e5082e3f9fdccc9f2e8388f2a87ea4/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/talison/.gradle/caches/transforms-3/53e5082e3f9fdccc9f2e8388f2a87ea4/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/talison/.gradle/caches/transforms-3/7b9eabbb4830e24e0297ed494c592500/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/talison/.gradle/caches/transforms-3/7b9eabbb4830e24e0297ed494c592500/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/talison/.gradle/caches/transforms-3/8b8015088b2c08b7ad07b06ff4793fb7/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/talison/.gradle/caches/transforms-3/8b8015088b2c08b7ad07b06ff4793fb7/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/talison/.gradle/caches/transforms-3/bea0671078170bf928699b787da27711/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/talison/.gradle/caches/transforms-3/bea0671078170bf928699b787da27711/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /home/talison/.gradle/caches/transforms-3/8f4c693ea9f357397f7dade6a8d12b85/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /home/talison/.gradle/caches/transforms-3/8f4c693ea9f357397f7dade6a8d12b85/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/talison/.gradle/caches/transforms-3/667639e579456fc09819f28da8c92386/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/talison/.gradle/caches/transforms-3/667639e579456fc09819f28da8c92386/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/talison/.gradle/caches/transforms-3/382ab80d0c92ad37ad75ad04c7e9340d/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/talison/.gradle/caches/transforms-3/382ab80d0c92ad37ad75ad04c7e9340d/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/talison/.gradle/caches/transforms-3/d48dc23c7880bf86276a91bfbb9996e2/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/talison/.gradle/caches/transforms-3/d48dc23c7880bf86276a91bfbb9996e2/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] /home/talison/.gradle/caches/transforms-3/b9d97fb34451343f9430e1aa7073afa6/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/talison/.gradle/caches/transforms-3/b9d97fb34451343f9430e1aa7073afa6/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.2.0] /home/talison/.gradle/caches/transforms-3/fc740ce8f988fd64f49c90401667f4c5/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.tracing:tracing:1.2.0] /home/talison/.gradle/caches/transforms-3/fc740ce8f988fd64f49c90401667f4c5/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/talison/.gradle/caches/transforms-3/dbce0d73524d10cf4919bcde513070df/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/talison/.gradle/caches/transforms-3/dbce0d73524d10cf4919bcde513070df/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/talison/.gradle/caches/transforms-3/d05da532477649963fa3e82d58e0a3a9/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/talison/.gradle/caches/transforms-3/d05da532477649963fa3e82d58e0a3a9/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/talison/.gradle/caches/transforms-3/f87d67599aa47d0f756ed6682d31418b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/talison/.gradle/caches/transforms-3/f87d67599aa47d0f756ed6682d31418b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/talison/.gradle/caches/transforms-3/4abfb14423eab8b58a348c08c4a2b0d2/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/talison/.gradle/caches/transforms-3/4abfb14423eab8b58a348c08c4a2b0d2/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window.extensions.core:core:1.0.0] /home/talison/.gradle/caches/transforms-3/89a9d9d57cbd452d47af537aeb6acace/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.window.extensions.core:core:1.0.0] /home/talison/.gradle/caches/transforms-3/89a9d9d57cbd452d47af537aeb6acace/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /home/talison/.gradle/caches/transforms-3/4455a4438fb99946695098c367fa0988/transformed/jetified-annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] /home/talison/.gradle/caches/transforms-3/4455a4438fb99946695098c367fa0988/transformed/jetified-annotation-experimental-1.4.1/AndroidManifest.xml:5:5-44
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/main/AndroidManifest.xml
+		INJECTED from /home/talison/dev/rainy-road-app/android/app/src/debug/AndroidManifest.xml
+uses-permission#android.permission.VIBRATE
+ADDED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-66
+	android:name
+		ADDED from [:flutter_local_notifications] /home/talison/dev/rainy-road-app/build/flutter_local_notifications/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-63
+activity#io.flutter.plugins.urllauncher.WebViewActivity
+ADDED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+	android:exported
+		ADDED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+	android:theme
+		ADDED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+	android:name
+		ADDED from [:url_launcher_android] /home/talison/dev/rainy-road-app/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+uses-library#androidx.window.extensions
+ADDED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
+	android:required
+		ADDED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
+	android:name
+		ADDED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
+uses-library#androidx.window.sidecar
+ADDED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
+	android:required
+		ADDED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
+	android:name
+		ADDED from [androidx.window:window:1.2.0] /home/talison/.gradle/caches/transforms-3/5ab9d1d95ba89b6c435c79a8ef4bb375/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/talison/.gradle/caches/transforms-3/9f7d43b6087acb17ad84fa3dfa8d58b4/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/talison/.gradle/caches/transforms-3/a5b4eafbf8ed8407287ca7b6e26fb2f4/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/talison/.gradle/caches/transforms-3/c314bda16b29ffcabb14b4b56664b376/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+permission#com.rtalis.rainy_road_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+uses-permission#com.rtalis.rainy_road_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] /home/talison/.gradle/caches/transforms-3/7b9cc716733896fdb33be34a758f3226/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/talison/.gradle/caches/transforms-3/8a3ff53f3181b8bfec731869565d7551/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
