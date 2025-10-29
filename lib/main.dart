@@ -564,7 +564,7 @@ class MyAppState extends ChangeNotifier {
     try {
       requestUri = _buildEndpointUri(
         baseUrl,
-        'generate_map',
+        'generate_map_v2',
         <String, String>{
           'start_location': startLocation,
           'end_location': endLocation,
