@@ -1,24 +1,36 @@
+import 'dart:convert';
+import 'dart:core';
+import 'dart:developer' as developer;
+
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:rainy_road_app/src/alarm_manager.dart';
 import 'package:rainy_road_app/src/frosted_glass.dart';
 import 'package:rainy_road_app/src/notification_service.dart';
 import 'package:rainy_road_app/src/settings.dart';
 import 'package:rainy_road_app/src/update.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:core';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'dart:developer' as developer;
+import 'package:webview_flutter/webview_flutter.dart';
 
 Future<void> showNotification(MyAppState appState) async {
   try {
-    appState.response = await http.get(Uri.parse(
-        '${appState.server}/generate_map?start_location=${appState.startCity}&end_location=${appState.endCity}}'));
-    appState.htmlContent = appState.response.body;
+    if (!appState.isServerConfigured ||
+        appState.startCity.isEmpty ||
+        appState.endCity.isEmpty) {
+      developer.log('Servidor ou cidades não configurados. Notificação cancelada.');
+      return;
+    }
+
+    final html = await appState.fetchMapHtml(
+      start: appState.startCity,
+      end: appState.endCity,
+    );
+
+    appState.htmlContent = html;
     appState.controller.loadHtmlString(appState.htmlContent);
     final colorValues = appState.extractColorValues(appState.htmlContent);
     appState.isColorDifferent = colorValues.any((color) => color != "#00c600");
@@ -35,8 +47,10 @@ Future<void> showNotification(MyAppState appState) async {
           "Sem chuvas no caminho entre $shortNameStartCity e $shortNameEndCity",
           'ic_stat_rr_sun');
     }
+  } on MapGenerationException catch (error) {
+    developer.log('Falha ao gerar mapa para notificação: ${error.message}');
   } catch (error) {
-    developer.log(error.toString());
+    developer.log('Erro inesperado na notificação: $error');
   }
 }
 
@@ -284,11 +298,21 @@ class _MapScreenState extends State<MapScreen> {
                                       ),
                                     );
                                   } else {
-                                    setState(() {});
-                                    appState
-                                        .generateMap(context)
-                                        .then((_) => setState(() {}));
                                     appState.saveSettings();
+                                    appState
+                                        .generateMap(
+                                          context,
+                                          onProgress: () {
+                                            if (mounted) {
+                                              setState(() {});
+                                            }
+                                          },
+                                        )
+                                        .then((_) {
+                                      if (mounted) {
+                                        setState(() {});
+                                      }
+                                    });
                                   }
                                 }
                               },
@@ -311,19 +335,41 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Visibility(
             visible: appState.isLoading,
-            child: const Center(
+            child: Center(
               child: FrostedGlassBox(
-                height: 200.0,
-                width: 300.0,
+                height: 220.0,
+                width: 320.0,
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 20),
-                      Text("Gerando mapa, isso pode levar até um minuto",
-                          textAlign: TextAlign.center),
+                      CircularProgressIndicator(
+                        value:/* appState.progressPercent > 0
+                            ? appState.progressPercent / 100
+                            : */
+                             null,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        appState.progressStageLabel,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      /*if (appState.progressDetail.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          appState.progressDetail,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],*/
+                      if (appState.progressPercent > 0) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          '${appState.progressPercent.toStringAsFixed(0)}% concluído',
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -334,31 +380,48 @@ class _MapScreenState extends State<MapScreen> {
       ),
     );
   }
-
-  List<String> extractColorValues(String content) {
-    final List<String> colorValues = [];
-    final RegExp colorRegex = RegExp(r'"color":\s*"#([0-9a-fA-F]{6})"');
-    final Iterable<Match> matches = colorRegex.allMatches(content);
-    for (var match in matches) {
-      if (match.groupCount == 1) {
-        colorValues.add("#${match.group(1)}");
-      }
-    }
-    return colorValues;
-  }
 }
 
+class MapGenerationException implements Exception {
+  MapGenerationException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+class MapProgress {
+  MapProgress({
+    required this.state,
+    required this.stage,
+    required this.percent,
+    required this.detail,
+  });
+
+  final String state;
+  final String stage;
+  final double percent;
+  final String detail;
+}
+
+typedef ProgressCallback = void Function(MapProgress progress);
+
 class MyAppState extends ChangeNotifier {
-  WebViewController controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(const Color(0x00000000))
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onProgress: (int progress) {
-          developer.log(progress.toString());
-        },
-      ),
-    );
+  MyAppState() {
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            developer.log(progress.toString());
+          },
+        ),
+      );
+  }
+
+  late final WebViewController controller;
   bool isColorDifferent = false;
   bool isLoading = false;
   String startCity = "";
@@ -367,7 +430,34 @@ class MyAppState extends ChangeNotifier {
   String htmlContent = "";
   String server = "http://";
   List<String> citiesList = List.empty();
-  http.Response response = http.Response("", 404);
+  String progressStage = "";
+  String progressDetail = "";
+  double progressPercent = 0;
+
+  static const Map<String, String> _stageLabels = {
+    "queued": "Tarefa na fila",
+    "coordinates": "Buscando coordenadas",
+    "memory_check": "Verificando requisitos",
+    "graph_primary": "Gerando rota principal",
+    "graph_secondary": "Gerando grafo filtrado",
+    "graph_full": "Gerando grafo completo",
+    "graph_radius": "Gerando grafo por raio",
+    "route": "Calculando rota",
+    "map": "Renderizando mapa",
+    "saving": "Salvando mapa",
+    "complete": "Mapa pronto",
+    "failed": "Falha na geração",
+  };
+
+  bool get isServerConfigured =>
+      server.trim().isNotEmpty && server.trim() != 'http://';
+
+  String get progressStageLabel {
+    if (progressStage.isEmpty) {
+      return 'Preparando requisição';
+    }
+    return _stageLabels[progressStage] ?? progressStage;
+  }
 
   void showMessageDialog(
       String title, Widget widget, int timeToContinue, BuildContext context) {
@@ -389,10 +479,8 @@ class MyAppState extends ChangeNotifier {
               });
             }
             return AlertDialog(
-              //backgroundColor: Colors.transparent,
               title: Text(title),
               content: widget,
-
               actions: <Widget>[
                 ElevatedButton(
                   style: allowContinue
@@ -430,7 +518,7 @@ class MyAppState extends ChangeNotifier {
 
   Future<void> loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.reload();
+    await prefs.reload();
     alarmTwoEnabled = prefs.getBool("alarmTwoEnabled") ?? false;
     endCity = prefs.getString('end') ?? '';
     startCity = prefs.getString('start') ?? '';
@@ -440,8 +528,8 @@ class MyAppState extends ChangeNotifier {
 
   Future<void> saveSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('start', startCity);
-    prefs.setString('end', endCity);
+    await prefs.setString('start', startCity);
+    await prefs.setString('end', endCity);
   }
 
   Future<void> loadCities() async {
@@ -454,102 +542,221 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
-  Future<void> generateMap(var context) async {
-    if (server == "http://") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Você precisa definir o servidor nas configurações'),
-        ),
+  Future<String> fetchMapHtml({
+    String? start,
+    String? end,
+    ProgressCallback? onProgress,
+    Duration pollInterval = const Duration(seconds: 1),
+    Duration requestTimeout = const Duration(seconds: 15),
+    Duration maxWait = const Duration(minutes: 5),
+  }) async {
+    final String startLocation = (start ?? startCity).trim();
+    final String endLocation = (end ?? endCity).trim();
+
+    if (startLocation.isEmpty || endLocation.isEmpty) {
+      throw MapGenerationException(
+        'As cidades de origem e destino são obrigatórias.',
+      );
+    }
+
+    final String baseUrl = _normalizedServerUrl();
+    late final Uri requestUri;
+    try {
+      requestUri = _buildEndpointUri(
+        baseUrl,
+        'generate_map_v2',
+        <String, String>{
+          'start_location': startLocation,
+          'end_location': endLocation,
+        },
+      );
+    } catch (error) {
+      throw MapGenerationException('Servidor inválido: $error');
+    }
+
+    http.Response response;
+    try {
+      response = await http.get(requestUri).timeout(requestTimeout);
+    } catch (error) {
+      throw MapGenerationException('Erro ao conectar ao servidor: $error');
+    }
+
+    if (response.statusCode != 202) {
+      final String message = _extractErrorMessage(response.body) ??
+          'Erro ao iniciar a geração do mapa (código ${response.statusCode}).';
+      throw MapGenerationException(message);
+    }
+
+    final dynamic decoded;
+    try {
+      decoded = jsonDecode(response.body);
+    } catch (_) {
+      throw MapGenerationException(
+          'Resposta inválida ao iniciar a geração do mapa.');
+    }
+    final String? taskId = (decoded is Map && decoded['task_id'] != null)
+        ? decoded['task_id'].toString()
+        : null;
+    if (taskId == null || taskId.isEmpty) {
+      throw MapGenerationException(
+          'Resposta inválida do servidor: task_id ausente.');
+    }
+
+    final DateTime deadline = DateTime.now().add(maxWait);
+
+    while (true) {
+      if (DateTime.now().isAfter(deadline)) {
+        throw MapGenerationException(
+            'Tempo limite excedido ao gerar o mapa.');
+      }
+
+      http.Response progressResponse;
+      try {
+        progressResponse = await http
+            .get(_buildEndpointUri(baseUrl, 'progress/$taskId'))
+            .timeout(requestTimeout);
+      } catch (error) {
+        throw MapGenerationException('Erro ao consultar progresso: $error');
+      }
+
+    if (progressResponse.statusCode != 200) {
+      final String message = _extractErrorMessage(progressResponse.body) ??
+          'Erro ao consultar progresso (código ${progressResponse.statusCode}).';
+      throw MapGenerationException(message);
+    }
+
+      final dynamic progressBody;
+      try {
+        progressBody = jsonDecode(progressResponse.body);
+      } catch (_) {
+        throw MapGenerationException(
+            'Resposta inválida ao consultar o progresso.');
+      }
+      if (progressResponse.statusCode != 200) {
+        throw MapGenerationException(progressBody['detail']);        
+      }
+      final MapProgress progress = MapProgress(
+        state: progressBody is Map && progressBody['state'] != null
+            ? progressBody['state'].toString()
+            : '',
+        stage: progressBody is Map && progressBody['stage'] != null
+            ? progressBody['stage'].toString()
+            : '',
+        percent: _parsePercent(progressBody is Map ? progressBody['percent'] : null),
+        detail: progressBody is Map && progressBody['detail'] != null
+            ? progressBody['detail'].toString()
+            : '',
+      );
+
+      onProgress?.call(progress);
+
+      if (progress.state == 'SUCCESS') {
+        http.Response resultResponse;
+        try {
+          resultResponse = await http
+              .get(_buildEndpointUri(baseUrl, 'result/$taskId'))
+              .timeout(requestTimeout);
+        } catch (error) {
+          throw MapGenerationException('Erro ao baixar o mapa: $error');
+        }
+
+        if (resultResponse.statusCode != 200) {
+          final String message = _extractErrorMessage(resultResponse.body) ??
+              'Erro ao baixar mapa (código ${resultResponse.statusCode}).';
+          throw MapGenerationException(message);
+        }
+
+        return resultResponse.body;
+      }
+
+      if (progress.state == 'FAILURE' || progress.stage == 'failed') {
+        final String message = progress.detail.isNotEmpty
+            ? progress.detail
+            : 'Falha ao gerar o mapa.';
+        throw MapGenerationException(message);
+      }
+
+      await Future.delayed(pollInterval);
+    }
+  }
+
+  Future<void> generateMap(BuildContext context,
+      {VoidCallback? onProgress}) async {
+    if (!isServerConfigured) {
+      _showSnackBar(
+        context,
+        'Você precisa definir o servidor nas configurações',
+        Colors.red,
+      );
+      return;
+    }
+
+    final String normalizedStart = startCity.trim();
+    final String normalizedEnd = endCity.trim();
+    if (normalizedStart.isEmpty || normalizedEnd.isEmpty) {
+      _showSnackBar(
+        context,
+        'Informe cidades válidas para iniciar a rota',
+        Colors.red,
+      );
+      return;
+    }
+
+    if (normalizedStart.toLowerCase() == normalizedEnd.toLowerCase()) {
+      _showSnackBar(
+        context,
+        'Digite o nome de cidades diferentes',
+        Colors.red,
       );
       return;
     }
 
     isLoading = true;
+    progressStage = 'queued';
+    progressDetail = 'Tarefa enviada para processamento';
+    progressPercent = 0;
     notifyListeners();
-    try {
-      response = await http.get(Uri.parse(
-          '$server/generate_map?start_location=$startCity&end_location=$endCity'));
-    } catch (error) {
-      isLoading = false;
-      notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          duration: const Duration(seconds: 6),
-          backgroundColor: Colors.red,
-          content: Text(
-              'Erro na conexão com o servidor\n ${error.toString().substring(0, 70)}...'),
-        ),
-      );
-    }
-    if (response.statusCode == 200) {
-      htmlContent = response.body;
-      controller.loadHtmlString(htmlContent);
-      final colorValues = extractColorValues(htmlContent);
-      isColorDifferent = colorValues.any((color) => color != "#00c600");
-      if (isColorDifferent) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.amber,
-            content: Text('Existe chuva esperada no caminho'),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.lightGreen,
-            content: Text('Sem chuvas no caminho'),
-          ),
-        );
-      }
-    } else if (response.statusCode == 507) {
-      htmlContent = response.body;
-      controller.loadHtmlString(htmlContent);
-      isLoading = false;
-      notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Servidor sem memória para esta requisição'),
-        ),
-      );
-    } else if (response.statusCode == 500) {
-      htmlContent = response.body;
-      controller.loadHtmlString(htmlContent);
-      isLoading = false;
-      notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Ocorreu um erro com esta requisição'),
-        ),
-      );
-    } else {
-      try {
-        htmlContent = response.body;
-        controller.loadHtmlString(htmlContent);
-        notifyListeners();
-        isLoading = false;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text('Ocorreu um erro com esta requisição'),
-          ),
-        );
-      } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-                'Erro na resposta do servidor \n ${error.toString().substring(0, 70)}...'),
-          ),
-        );
-        isLoading = false;
-      }
-    }
+    onProgress?.call();
 
-    isLoading = false;
-    notifyListeners();
+    try {
+      final String html = await fetchMapHtml(onProgress: (progress) {
+        progressStage = progress.stage;
+        progressDetail = progress.detail;
+        progressPercent = progress.percent;
+        notifyListeners();
+        onProgress?.call();
+      });
+
+      htmlContent = html;
+      controller.loadHtmlString(htmlContent);
+      final List<String> colorValues = extractColorValues(htmlContent);
+      isColorDifferent = colorValues.any((color) => color != "#00c600");
+      notifyListeners();
+      onProgress?.call();
+
+      _showSnackBar(
+        context,
+        isColorDifferent
+            ? 'Existe chuva esperada no caminho'
+            : 'Sem chuvas no caminho',
+        isColorDifferent ? Colors.amber : Colors.lightGreen,
+      );
+    } on MapGenerationException catch (error) {
+      _showSnackBar(context, error.message, Colors.red);
+    } catch (error) {
+      _showSnackBar(
+        context,
+        'Erro ao gerar mapa: ${_truncate(error.toString(), 120)}',
+        Colors.red,
+      );
+    } finally {
+      isLoading = false;
+      progressStage = '';
+      progressDetail = '';
+      progressPercent = 0;
+      notifyListeners();
+      onProgress?.call();
+    }
   }
 
   void openSettings(var context) {
@@ -582,9 +789,79 @@ class MyAppState extends ChangeNotifier {
   String shortName(String input) {
     if (input.contains(',')) {
       return input.substring(0, input.indexOf(','));
-    } else {
-      return input;
     }
+    return input;
+  }
+
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: color,
+        content: Text(message, textAlign: TextAlign.center),
+      ),
+    );
+  }
+
+  String _normalizedServerUrl() {
+    var value = server.trim();
+    if (value.endsWith('/')) {
+      value = value.substring(0, value.length - 1);
+    }
+    return value;
+  }
+
+  Uri _buildEndpointUri(String base, String segment,
+      [Map<String, String>? queryParameters]) {
+    final Uri baseUri = Uri.parse(base);
+    final String combinedPath;
+    if (baseUri.path.isEmpty || baseUri.path == '/') {
+      combinedPath = segment;
+    } else if (baseUri.path.endsWith('/')) {
+      combinedPath = '${baseUri.path}$segment';
+    } else {
+      combinedPath = '${baseUri.path}/$segment';
+    }
+    return baseUri.replace(path: combinedPath, queryParameters: queryParameters);
+  }
+
+  String? _extractErrorMessage(String body) {
+    if (body.isEmpty) {
+      return null;
+    }
+    try {
+      final dynamic decoded = jsonDecode(body);
+      if (decoded['detail'] is String) {
+        return decoded['detail'];
+      }
+      if (decoded is Map && decoded['error'] != null) {
+        return decoded['error'].toString();
+      } else {
+        return decoded['detail'];
+      }
+    } catch (_) {
+      // conteúdo não JSON, usa texto bruto
+    }
+    return _truncate(body, 200);
+  }
+
+  double _parsePercent(dynamic value) {
+    if (value is num) {
+      return value.toDouble();
+    }
+    if (value is String) {
+      final double? parsed = double.tryParse(value);
+      if (parsed != null) {
+        return parsed;
+      }
+    }
+    return 0;
+  }
+
+  String _truncate(String value, int maxLength) {
+    if (value.length <= maxLength) {
+      return value;
+    }
+    return '${value.substring(0, maxLength)}...';
   }
 }
 

@@ -1,5 +1,8 @@
+import com.android.build.gradle.BaseExtension
+import groovy.xml.XmlParser
+
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '2.2.0'
     repositories {
         google()
         mavenCentral()
@@ -17,6 +20,27 @@ allprojects {
     }
 }
 
+subprojects { subproject ->
+    subproject.afterEvaluate { evaluatedProject ->
+        def androidExt = evaluatedProject.extensions.findByType(BaseExtension)
+        if (androidExt == null) {
+            return
+        }
+
+        configureAndroid(androidExt)
+
+        if (evaluatedProject.plugins.hasPlugin('com.android.library')) {
+            ensureNamespace(evaluatedProject, androidExt)
+        }
+    }
+
+    subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_17.toString()
+        }
+    }
+}
+
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
@@ -27,4 +51,40 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+def configureAndroid(BaseExtension androidExt) {
+    if (androidExt.hasProperty('compileSdk') && androidExt.compileSdk instanceof Integer) {
+        androidExt.compileSdk = Math.max(androidExt.compileSdk ?: 0, 35)
+    } else {
+        androidExt.compileSdkVersion(35)
+    }
+
+    if (androidExt.hasProperty('compileOptions') && androidExt.compileOptions != null) {
+        androidExt.compileOptions.sourceCompatibility = JavaVersion.VERSION_17
+        androidExt.compileOptions.targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+def ensureNamespace(project, BaseExtension androidExt) {
+    if (androidExt.namespace) {
+        return
+    }
+
+    def manifestFile = androidExt.sourceSets.main?.manifest?.srcFile
+    if (manifestFile?.exists()) {
+        def parsedManifest = new XmlParser().parse(manifestFile)
+        def packageName = parsedManifest.attribute('package')
+        androidExt.namespace = packageName ?: fallbackNamespace(project)
+    } else {
+        androidExt.namespace = fallbackNamespace(project)
+    }
+}
+
+def fallbackNamespace(project) {
+    def groupName = project.group?.toString()
+    if (groupName && groupName != 'unspecified') {
+        return groupName
+    }
+    return "com.rtalis.rainy_road_app"
 }
