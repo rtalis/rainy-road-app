@@ -345,9 +345,10 @@ class _MapScreenState extends State<MapScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(
-                        value: appState.progressPercent > 0
+                        value:/* appState.progressPercent > 0
                             ? appState.progressPercent / 100
-                            : null,
+                            : */
+                             null,
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -355,13 +356,13 @@ class _MapScreenState extends State<MapScreen> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      if (appState.progressDetail.isNotEmpty) ...[
+                      /*if (appState.progressDetail.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         Text(
                           appState.progressDetail,
                           textAlign: TextAlign.center,
                         ),
-                      ],
+                      ],*/
                       if (appState.progressPercent > 0) ...[
                         const SizedBox(height: 8),
                         Text(
@@ -437,7 +438,7 @@ class MyAppState extends ChangeNotifier {
     "queued": "Tarefa na fila",
     "coordinates": "Buscando coordenadas",
     "memory_check": "Verificando requisitos",
-    "graph_primary": "Gerando grafo principal",
+    "graph_primary": "Gerando rota principal",
     "graph_secondary": "Gerando grafo filtrado",
     "graph_full": "Gerando grafo completo",
     "graph_radius": "Gerando grafo por raio",
@@ -545,7 +546,7 @@ class MyAppState extends ChangeNotifier {
     String? start,
     String? end,
     ProgressCallback? onProgress,
-    Duration pollInterval = const Duration(seconds: 2),
+    Duration pollInterval = const Duration(seconds: 1),
     Duration requestTimeout = const Duration(seconds: 15),
     Duration maxWait = const Duration(minutes: 5),
   }) async {
@@ -618,11 +619,11 @@ class MyAppState extends ChangeNotifier {
         throw MapGenerationException('Erro ao consultar progresso: $error');
       }
 
-      if (progressResponse.statusCode != 200) {
-        throw MapGenerationException(
-          'Erro (${progressResponse.statusCode}) ao consultar progresso.',
-        );
-      }
+    if (progressResponse.statusCode != 200) {
+      final String message = _extractErrorMessage(progressResponse.body) ??
+          'Erro ao consultar progresso (código ${progressResponse.statusCode}).';
+      throw MapGenerationException(message);
+    }
 
       final dynamic progressBody;
       try {
@@ -630,6 +631,9 @@ class MyAppState extends ChangeNotifier {
       } catch (_) {
         throw MapGenerationException(
             'Resposta inválida ao consultar o progresso.');
+      }
+      if (progressResponse.statusCode != 200) {
+        throw MapGenerationException(progressBody['detail']);        
       }
       final MapProgress progress = MapProgress(
         state: progressBody is Map && progressBody['state'] != null
@@ -826,8 +830,13 @@ class MyAppState extends ChangeNotifier {
     }
     try {
       final dynamic decoded = jsonDecode(body);
+      if (decoded['detail'] is String) {
+        return decoded['detail'];
+      }
       if (decoded is Map && decoded['error'] != null) {
         return decoded['error'].toString();
+      } else {
+        return decoded['detail'];
       }
     } catch (_) {
       // conteúdo não JSON, usa texto bruto
