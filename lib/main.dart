@@ -21,7 +21,8 @@ Future<void> showNotification(MyAppState appState) async {
     if (!appState.isServerConfigured ||
         appState.startCity.isEmpty ||
         appState.endCity.isEmpty) {
-      developer.log('Servidor ou cidades não configurados. Notificação cancelada.');
+      developer
+          .log('Servidor ou cidades não configurados. Notificação cancelada.');
       return;
     }
 
@@ -200,12 +201,33 @@ class _MapScreenState extends State<MapScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TypeAheadField(
-                          emptyBuilder: (context) =>
-                              const Text('Insira o nome da cidade de partida'),
+                          emptyBuilder: (context) => const Text(
+                              'Digite o nome da cidade (ex: Paris, London, São Paulo)'),
+                          loadingBuilder: (context) => const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                                SizedBox(width: 10),
+                                Text('Buscando cidades...'),
+                              ],
+                            ),
+                          ),
+                          debounceDuration: const Duration(milliseconds: 400),
                           builder: (context, controller, focusNode) {
                             return TextFormField(
                               controller: controller,
                               focusNode: focusNode,
+                              decoration: const InputDecoration(
+                                hintText: 'Cidade de partida',
+                                prefixIcon: Icon(Icons.location_on_outlined),
+                              ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Insira uma cidade';
@@ -216,20 +238,11 @@ class _MapScreenState extends State<MapScreen> {
                           },
                           controller: _startLocationController,
                           suggestionsCallback: (pattern) async {
-                            if (pattern == '') {
-                              return List.empty();
-                            }
-                            return appState.citiesList.where((String option) {
-                              return option
-                                  .toLowerCase()
-                                  .withoutDiacriticalMarks
-                                  .contains(pattern
-                                      .toLowerCase()
-                                      .withoutDiacriticalMarks);
-                            }).toList();
+                            return await appState.searchCities(pattern);
                           },
                           itemBuilder: (context, suggestion) {
                             return ListTile(
+                              leading: const Icon(Icons.location_city),
                               title: Text(suggestion),
                             );
                           },
@@ -240,11 +253,32 @@ class _MapScreenState extends State<MapScreen> {
                         const SizedBox(height: 16.0),
                         TypeAheadField(
                             emptyBuilder: (context) => const Text(
-                                'Insira o nome da cidade de destino'),
+                                'Digite o nome da cidade (ex: Paris, London, São Paulo)'),
+                            loadingBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text('Buscando cidades...'),
+                                    ],
+                                  ),
+                                ),
+                            debounceDuration: const Duration(milliseconds: 400),
                             builder: (context, controller, focusNode) {
                               return TextFormField(
                                 controller: controller,
                                 focusNode: focusNode,
+                                decoration: const InputDecoration(
+                                  hintText: 'Cidade de destino',
+                                  prefixIcon: Icon(Icons.flag_outlined),
+                                ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Insira outra cidade';
@@ -255,20 +289,11 @@ class _MapScreenState extends State<MapScreen> {
                             },
                             controller: _endLocationController,
                             suggestionsCallback: (pattern) async {
-                              if (pattern == '') {
-                                return List.empty();
-                              }
-                              return appState.citiesList.where((String option) {
-                                return option
-                                    .toLowerCase()
-                                    .withoutDiacriticalMarks
-                                    .contains(pattern
-                                        .toLowerCase()
-                                        .withoutDiacriticalMarks);
-                              }).toList();
+                              return await appState.searchCities(pattern);
                             },
                             itemBuilder: (context, suggestion) {
                               return ListTile(
+                                leading: const Icon(Icons.location_city),
                                 title: Text(suggestion),
                               );
                             },
@@ -299,16 +324,14 @@ class _MapScreenState extends State<MapScreen> {
                                     );
                                   } else {
                                     appState.saveSettings();
-                                    appState
-                                        .generateMap(
-                                          context,
-                                          onProgress: () {
-                                            if (mounted) {
-                                              setState(() {});
-                                            }
-                                          },
-                                        )
-                                        .then((_) {
+                                    appState.generateMap(
+                                      context,
+                                      onProgress: () {
+                                        if (mounted) {
+                                          setState(() {});
+                                        }
+                                      },
+                                    ).then((_) {
                                       if (mounted) {
                                         setState(() {});
                                       }
@@ -345,10 +368,10 @@ class _MapScreenState extends State<MapScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(
-                        value:/* appState.progressPercent > 0
+                        value: /* appState.progressPercent > 0
                             ? appState.progressPercent / 100
                             : */
-                             null,
+                            null,
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -408,6 +431,15 @@ class MapProgress {
 typedef ProgressCallback = void Function(MapProgress progress);
 
 class MyAppState extends ChangeNotifier {
+  static const List<String> _cityAssetPaths = <String>[
+    'assets/text/cities.txt'
+  ];
+
+  // Cache for API search results
+  String _lastSearchQuery = '';
+  List<String> _lastSearchResults = [];
+  DateTime? _lastSearchTime;
+
   MyAppState() {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -428,7 +460,7 @@ class MyAppState extends ChangeNotifier {
   bool alarmTwoEnabled = false;
   String endCity = "";
   String htmlContent = "";
-  String server = "http://";
+  String server = "https://rainyroad.duckdns.org";
   List<String> citiesList = List.empty();
   String progressStage = "";
   String progressDetail = "";
@@ -542,6 +574,109 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
+  Future<List<String>> searchCities(String query) async {
+    if (query.isEmpty || query.length < 2) {
+      return [];
+    }
+
+    final normalizedQuery = query.trim();
+
+    // Return cached results if same query within 500ms
+    if (_lastSearchQuery == normalizedQuery &&
+        _lastSearchTime != null &&
+        DateTime.now().difference(_lastSearchTime!).inMilliseconds < 500) {
+      return _lastSearchResults;
+    }
+
+    try {
+      // Search using Nominatim API (OpenStreetMap)
+      final url = Uri.parse(
+        'https://nominatim.openstreetmap.org/search'
+        '?q=${Uri.encodeComponent(normalizedQuery)}'
+        '&format=json'
+        '&addressdetails=1'
+        '&limit=10'
+        '&featuretype=city'
+        '&accept-language=pt,en',
+      );
+
+      final response = await http.get(
+        url,
+        headers: {'User-Agent': 'RainyRoadApp/1.0'},
+      ).timeout(const Duration(seconds: 5));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        final results =
+            data.map((item) => _formatNominatimResult(item)).toList();
+
+        // Cache results
+        _lastSearchQuery = normalizedQuery;
+        _lastSearchResults = results;
+        _lastSearchTime = DateTime.now();
+
+        // If API returns results, use them; otherwise fall back to local
+        if (results.isNotEmpty) {
+          return results;
+        }
+      }
+    } catch (e) {
+      developer.log('Nominatim API error: $e');
+    }
+
+    // Fallback to local Brazilian cities search
+    return _searchLocalCities(normalizedQuery);
+  }
+
+  String _formatNominatimResult(Map<String, dynamic> item) {
+    final address = item['address'] as Map<String, dynamic>? ?? {};
+
+    final city = address['city'] ??
+        address['town'] ??
+        address['village'] ??
+        address['municipality'] ??
+        item['name'] ??
+        '';
+
+    final state =
+        address['state'] ?? address['region'] ?? address['province'] ?? '';
+
+    final country = address['country'] ?? '';
+
+    final stateCode =
+        address['ISO3166-2-lvl4']?.toString().split('-').last ?? '';
+
+    final parts = <String>[];
+    if (city.toString().isNotEmpty) parts.add(city.toString());
+    if (stateCode.isNotEmpty && stateCode.length <= 3) {
+      parts.add(stateCode);
+    } else if (state.toString().isNotEmpty) {
+      parts.add(state.toString());
+    }
+    if (country.toString().isNotEmpty) parts.add(country.toString());
+
+    return parts.join(', ');
+  }
+
+  List<String> _searchLocalCities(String query) {
+    final terms = query
+        .toLowerCase()
+        .withoutDiacriticalMarks
+        .split(RegExp(r'[,\s]+'))
+        .where((t) => t.isNotEmpty)
+        .toList();
+
+    if (terms.isEmpty) return [];
+
+    return citiesList
+        .where((city) {
+          final normalizedCity = city.toLowerCase().withoutDiacriticalMarks;
+          return terms.every((term) => normalizedCity.contains(term));
+        })
+        .take(15)
+        .toList();
+  }
+
   Future<String> fetchMapHtml({
     String? start,
     String? end,
@@ -606,8 +741,7 @@ class MyAppState extends ChangeNotifier {
 
     while (true) {
       if (DateTime.now().isAfter(deadline)) {
-        throw MapGenerationException(
-            'Tempo limite excedido ao gerar o mapa.');
+        throw MapGenerationException('Tempo limite excedido ao gerar o mapa.');
       }
 
       http.Response progressResponse;
@@ -619,11 +753,11 @@ class MyAppState extends ChangeNotifier {
         throw MapGenerationException('Erro ao consultar progresso: $error');
       }
 
-    if (progressResponse.statusCode != 200) {
-      final String message = _extractErrorMessage(progressResponse.body) ??
-          'Erro ao consultar progresso (código ${progressResponse.statusCode}).';
-      throw MapGenerationException(message);
-    }
+      if (progressResponse.statusCode != 200) {
+        final String message = _extractErrorMessage(progressResponse.body) ??
+            'Erro ao consultar progresso (código ${progressResponse.statusCode}).';
+        throw MapGenerationException(message);
+      }
 
       final dynamic progressBody;
       try {
@@ -633,7 +767,7 @@ class MyAppState extends ChangeNotifier {
             'Resposta inválida ao consultar o progresso.');
       }
       if (progressResponse.statusCode != 200) {
-        throw MapGenerationException(progressBody['detail']);        
+        throw MapGenerationException(progressBody['detail']);
       }
       final MapProgress progress = MapProgress(
         state: progressBody is Map && progressBody['state'] != null
@@ -642,7 +776,8 @@ class MyAppState extends ChangeNotifier {
         stage: progressBody is Map && progressBody['stage'] != null
             ? progressBody['stage'].toString()
             : '',
-        percent: _parsePercent(progressBody is Map ? progressBody['percent'] : null),
+        percent:
+            _parsePercent(progressBody is Map ? progressBody['percent'] : null),
         detail: progressBody is Map && progressBody['detail'] != null
             ? progressBody['detail'].toString()
             : '',
@@ -821,7 +956,8 @@ class MyAppState extends ChangeNotifier {
     } else {
       combinedPath = '${baseUri.path}/$segment';
     }
-    return baseUri.replace(path: combinedPath, queryParameters: queryParameters);
+    return baseUri.replace(
+        path: combinedPath, queryParameters: queryParameters);
   }
 
   String? _extractErrorMessage(String body) {
