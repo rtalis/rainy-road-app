@@ -33,6 +33,7 @@ Future<void> showNotification(MyAppState appState) async {
 
     appState.htmlContent = html;
     appState.controller.loadHtmlString(appState.htmlContent);
+    await NotificationService.saveLastMapHtml(html);
     final colorValues = appState.extractColorValues(appState.htmlContent);
     appState.isColorDifferent = colorValues.any((color) => color != "#00c600");
     String shortNameStartCity = appState.shortName(appState.startCity);
@@ -72,9 +73,9 @@ void setNotification(int id) {
   });
 }
 
-main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService().initialize();
+  await NotificationService().initialize();
   runApp(const RainyRoadApp());
 }
 
@@ -86,6 +87,7 @@ class RainyRoadApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'Rainy Road App ',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -121,6 +123,29 @@ class _MapScreenState extends State<MapScreen> {
           _startLocationController.text = appState.startCity;
           _endLocationController.text = appState.endCity;
         }));
+
+    // Set up notification tap callback
+    NotificationService.onNotificationTapped = _openLastMap;
+
+    // Check if app was launched from notification
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final pendingPayload = NotificationService.pendingNotificationPayload;
+      if (pendingPayload == 'show_last_map') {
+        _openLastMap();
+      }
+    });
+  }
+
+  void _openLastMap() async {
+    final html = await NotificationService.loadLastMapHtml();
+    if (html != null && html.isNotEmpty && mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LastMapScreen(htmlContent: html),
+        ),
+      );
+    }
   }
 
   void handleClick(int item) {
@@ -864,6 +889,8 @@ class MyAppState extends ChangeNotifier {
 
       htmlContent = html;
       controller.loadHtmlString(htmlContent);
+      // Save the map HTML for later viewing when notification is tapped
+      await NotificationService.saveLastMapHtml(html);
       final List<String> colorValues = extractColorValues(htmlContent);
       isColorDifferent = colorValues.any((color) => color != "#00c600");
       notifyListeners();
@@ -1011,4 +1038,91 @@ extension DiacriticsAwareString on String {
       onNonMatch: (char) => char.isNotEmpty && diacritics.contains(char)
           ? nonDiacritics[diacritics.indexOf(char)]
           : char);
+}
+
+/// Screen to display the last generated map when notification is tapped
+class LastMapScreen extends StatefulWidget {
+  final String htmlContent;
+
+  const LastMapScreen({super.key, required this.htmlContent});
+
+  @override
+  State<LastMapScreen> createState() => _LastMapScreenState();
+}
+
+class _LastMapScreenState extends State<LastMapScreen> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..loadHtmlString(widget.htmlContent);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check if there's rain in the route
+    final colorValues = _extractColorValues(widget.htmlContent);
+    final hasRain = colorValues.any((color) => color != "#00c600");
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Último Mapa'),
+        backgroundColor: hasRain ? Colors.amber : Colors.lightGreen,
+      ),
+      body: Stack(
+        children: [
+          WebViewWidget(controller: _controller),
+          Positioned(
+            bottom: 16,
+            left: 16,
+            right: 16,
+            child: Card(
+              color:
+                  hasRain ? Colors.amber.shade100 : Colors.lightGreen.shade100,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      hasRain ? Icons.water_drop : Icons.wb_sunny,
+                      color: hasRain ? Colors.orange : Colors.green,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      hasRain
+                          ? 'Chuva esperada no trajeto'
+                          : 'Sem chuvas no trajeto',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: hasRain
+                            ? Colors.orange.shade800
+                            : Colors.green.shade800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<String> _extractColorValues(String content) {
+    final List<String> colorValues = [];
+    final RegExp colorRegex = RegExp(r'"color":\s*"#([0-9a-fA-F]{6})"');
+    final Iterable<Match> matches = colorRegex.allMatches(content);
+    for (var match in matches) {
+      if (match.groupCount == 1) {
+        colorValues.add("#${match.group(1)}");
+      }
+    }
+    return colorValues;
+  }
 }

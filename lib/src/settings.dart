@@ -202,7 +202,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadSettings() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _serverController.text = prefs.getString('server') ?? "http://";
+      _serverController.text =
+          prefs.getString('server') ?? "https://rainyroad.duckdns.org";
       repEnabled = prefs.getBool('repEnabled') ?? false;
       alarmTwoEnabled = prefs.getBool('alarmTwoEnabled') ?? false;
       frequency = prefs.getString('frequency') ?? "";
@@ -258,7 +259,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       case Calendar.weekEnds:
         frequency = 'weekEnds';
         break;
-      // Add more cases if needed
       default:
         // Default case if none of the above matches
         frequency = '';
